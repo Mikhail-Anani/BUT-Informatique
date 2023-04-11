@@ -1,0 +1,111 @@
+.bouton {
+	display: inline-block;
+	background-color: #dbeca9;
+	border-radius: 10px;
+	border: 1px double #cccccc;
+	color: 	rgb(139,0,0);
+	text-align: center;
+	font-size: 21px;
+	width: 130px;
+	-webkit-transition: all 0.5s;
+ 	-moz-transition:  all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;
+	cursor: pointer;
+	box-shadow: 6px 8px 5px rgb(127,115,153);
+	text-decoration:none; 
+}
+
+.titre {
+text-align: center;
+color: rgb(0,0,255);
+font-size: 50px;
+}
+
+.center {
+text-align: center;
+margin-left: auto;
+margin-right: auto;
+}
+
+.centert {
+text-align: center;
+font-size: 35px;
+color: rgb(169.169.169);
+}
+
+.banniere {
+width: 95%;
+height: 12em;
+margin: 40px;
+margin-top: 20px;
+}
+
+.rectangle {
+width: 90em;
+height: 17em;
+margin-right: auto;
+margin-left: auto;
+background: rgb(255,228,225);
+border-radius: 5px;
+padding: 5px;
+opacity: 0.4;
+box-shadow: 10px 12px 3px rgb(139,0,0);
+font-weight: bold;
+}
+
+footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background: white;
+   text-align: center;
+}
+
+.violet {
+text-align: center;
+font-weight: bold;
+background: rgb(138,43,226);
+border-top: 3px solid rgb(153,141,180);
+border-left: 3px solid rgb(153,141,180);
+border-right: 2px solid white;
+border-bottom: 2px solid white;
+width: 50%;
+margin-left: auto;
+margin-right: auto;
+font-family: Arial, sans-serif;
+}
+
+.tableau {
+text-align: center;
+border: 2px solid rgb(25,25,112);
+background: #c5eff1;
+opacity: 0.75;
+background-size: 75%;
+margin-left: auto;
+margin-right: auto;
+font-size: 1.1em;
+}
+
+
+.list{
+margin-right: auto;
+margin-left: auto;
+color: rgb(0,191,255);
+width:30em;
+height: 3em;
+border-radius: 5px;
+box-shadow: 7px 7px 0px rgb(197,205,203);
+font-size: 1.1em;
+}
+
+
+body {
+background-image: url(../images/pole-taverny.jpg);
+margin-top: 0px;
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-position: center;
+}

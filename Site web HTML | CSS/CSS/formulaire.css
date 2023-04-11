@@ -1,0 +1,81 @@
+.derriere{
+background: rgb(202,226,238);
+text-align: center;
+margin-right: auto;
+margin-left: auto;
+margin-top: 0.5em;
+width: 45em;
+height: 21em;
+}
+
+.formulaire{
+background: rgb(219,183,231);
+margin-left: auto;
+margin-right: auto;
+border-radius: 5px;
+background-size: 50%;
+border: 1px solid white;
+width: 65em;
+height: 22em;
+}
+
+.formulaire22{
+background: rgb(219,183,231);
+margin-left: auto;
+margin-right: auto;
+border-radius: 5px;
+background-size: 50%;
+border: 1px solid white;
+width: 65em;
+height: 10em;
+}
+
+.formulaire33{
+background: rgb(219,183,231);
+margin-left: auto;
+margin-right: auto;
+border-radius: 5px;
+background-size: 50%;
+border: 1px solid white;
+width: 65em;
+height: 5em;
+}
+
+
+.color1{
+color: rgb(0,0,255);
+background: rgb(219,183,231);
+border: 1px solid grey;
+border-style: dotted; 
+width:30em;
+height:2em;
+}
+
+.taille{
+width:30em;
+height:2em;
+}
+
+
+input::placeholder {
+color: rgb(0,0,255);
+}
+
+.gauche{
+text-align: left;
+
+}
+
+.bold{
+font-weight: bold;
+color: rgb(111,117,133);
+font-family: Arial;
+
+}
+
+.bold2{
+font-weight: bold;
+color: rgb(111,117,133);
+font-family: Arial;
+text-align: left;
+}
