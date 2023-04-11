@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+	<meta charset="UTF-8">
+	<link <link href="css/style.css" rel="stylesheet" />
+	<link <link href="css/formulaire.css" rel="stylesheet" />
+	<title>Index</title>
+	</head>
+
+
+	<body >
+	
+		<header>
+		<img src="images/medicale-banniere.jpg" alt="image " class="banniere">
+		</header>
+
+		<nav class="center">
+		<ul class="center">
+			<a class="bouton" href="index.html">Accueil</a>
+			<a class="bouton" href="horaires.html">Horaires</a>
+			<a class="bouton" href="specialites.html">Spécialités</a>
+			<a class="bouton" href="priserdv.html">Rendez-vous</a>
+			<a class="bouton" href="formulaire.html">Contact</a>
+		</ul>
+		</nav>
+<form action="" method="post">
+<fieldset class="formulaire">
+<table class="derriere">
+
+<tr>
+<td class="bold"><label for="nom">Nom : </label></td>
+<td class="gauche"><input id="nom" name="nom" type="text" class="color1" placeholder="votre Nom"/></td>
+</tr>
+
+<tr>
+<td class="bold"><label for="Prenom">Prenom : </label></td>
+<td class="gauche"><input id="Prenom" name="Prenom" type="text" class="color1" placeholder="votre Prenom" /></td>
+</tr>
+
+<tr>
+<td class="bold"><label for="Date">Date de naissance : </label></td>
+<td class="gauche"><input id="date" name="date" type="date"/></td>
+</tr>
+
+<tr>
+<td class="bold"><label for="mail">Mail : </label></td>
+<td class="gauche"><input id="mail" name="mail" type="email" placeholder="votre mail" class="taille"/></td>
+</tr>
+
+<tr>
+<td class="bold"><label for="site">Votre site : </label></td>
+<td class="gauche"><input id="site" name="site" type="url" placeholder="http://www." class="taille" /></td>
+</tr>
+
+
+<tr>
+<td class="bold"><label for="genre">Genre : </label>
+<td class="bold2"><input name="genre" type="radio" value="1"/>Homme
+<input name="genre" type="radio" value="2" />Femme
+<input name="genre" type="radio" value="2" />WALLMART BAG</td>
+</tr>
+
+<tr>
+<td><label for="Pays"class="bold">Pays : </label></td>
+<td class="gauche"><label for="Pays" class="bold">Votre pays: </label><select name="Pays">
+<option value="FR">France</option>
+<option value="BE">Belgique</option>
+<option value="US">Etats-Unis</option>
+<option value="DE">Allemagne</option>
+<option value="AL">Algérie</option>
+<option value="DE">Japon</option>
+</select></td>
+</tr>
+
+</table>
+</fieldset>
+<fieldset class="formulaire22">
+<div><strong>Schéma vaccinal</strong></div>
+<input name="abc[1]" type="checkbox" value="1" />Covid-Schéma complet<br>
+<input name="abc[2]" type="checkbox" value="2" />Autres vaccins<br><br>
+<textarea rows="5" cols="55" maxlenght="1000" placeholder="vos antécédents médicaux"/></textarea>
+</fieldset>
+<fieldset class="formulaire33">
+<input type="file" value="Choisir un fichier" /><br></br>
+<input type="submit" value="Envoyer" />
+<input type="reset" value="Effacer"/>
+</fieldset>
+
+
+</form>
+
+	</body>
+
+</html>
