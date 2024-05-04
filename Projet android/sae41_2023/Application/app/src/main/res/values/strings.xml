@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Application</string>
+    <string name="morpionsolitaire">Morpion Solitaire</string>
+    <string name="jouer">Jouer</string>
+    <string name="option">option</string>
+    <string name="retour">Retour</string>
+
+    <string name="prefCroix">Grande croix de depart</string>
+    <string name="prefCroixSum">Oui / Non</string>
+    <string name="prefProlonger">Prolongement des Traits</string>
+    <string name="prefProlongerSum">Activer / Desactiver</string>
+    <string name="prefTriche">Mode triche</string>
+    <string name="prefTricheSum">Activer / Desactiver</string>
+</resources>

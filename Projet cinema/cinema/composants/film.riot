@@ -1,0 +1,161 @@
+<film>
+    <router base={base}>
+    
+        <route path="/:type?">
+            
+                <accueil></accueil>
+
+        </route>
+
+        <route path="#/:type">
+            <recherche_populaire filmType={route.params.type}></recherche_populaire>
+        </route>
+
+        <route path="#/movie/detail/:id">
+            <film_detail filmId={route.params.id}></film_detail>
+        </route>
+        <route path="#/tv/detail/:id">
+            <serie_detail filmId={route.params.id}></serie_detail>
+        </route>
+
+        <route path="#/acteur/detail/:id">
+            <acteur_detail acteurId={route.params.id}></acteur_detail>
+        </route>
+
+        <route path="#/recherche/:type?/text/:texte">
+            <recherche_text filmTxt={route.params.texte} filmType={route.params.type}></recherche_text>
+        </route>
+
+        <route path="#/recherche/:type?/genre/:genreId">
+            <recherche_genre genreId={route.params.genreId} filmType={route.params.type}></recherche_genre>
+        </route>
+
+        <route path="#/recherche/:type?/note">
+            <recherche_note filmType={route.params.type}></recherche_note>
+        </route>
+
+        <route path="#/recherche/:type?/populaire">
+            <recherche_populaire filmType={route.params.type}></recherche_populaire>
+        </route>
+
+        <route path="#/recherche/movie/comming">
+            <recherche_comming></recherche_comming>
+        </route>
+        <route path="#/recherche/tv/comming">
+            <erreur></erreur>
+        </route>
+
+        <route path="#/recherche/movie/recent">
+            <recherche_recent></recherche_recent>
+        </route>
+        <route path="#/recherche/tv/recent">
+            <erreur></erreur>
+        </route>
+
+        <route path="#/recherche/tv/today">
+            <recherche_today></recherche_today>
+        </route>
+        <route path="#/recherche/movie/today">
+            <erreur></erreur>
+        </route>
+
+        <route path="#/recherche/tv/curently">
+            <recherche_curently></recherche_curently>
+        </route>
+        <route path="#/recherche/movie/curently">
+            <erreur></erreur>
+        </route>
+
+        <route path="#/recherche/mauvais/genre">
+            <erreur></erreur>
+        </route>
+    </router>
+
+    <style>
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+
+    <script>
+        const base = `${window.location.hash ? window.location.hash.replace('#', '') : ''}`
+
+        export default {
+            state:{
+                films: [],
+                urlDetail: 'pageFilmDedie',
+                isMovie: true,
+                type: 'movie',
+                typeFr: 'films',
+                trie: 'Liste des films triés par popularité',
+                currentPage: 1,
+                isChercheGenre: false,
+                isRecent: false,
+                isNote: false,
+                actualIdGenre: '',
+                actualGenre: '',
+                isCherche: false,
+                actualCherche: '',
+                
+                fId: '',
+                max_page: 50 //il faut récuperer dans le JSON la variable nombre de page total
+            },
+
+            onMounted(){
+                this.fetchFilms();
+            },
+
+            fetchFilms() {
+                fetch(`https://api.themoviedb.org/3/movie/popular?api_key=143c38a426bcb241741fcffb55828445&language=fr-FR&page=${this.state.currentPage}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.results);
+                    this.update({ films: data.results.map(film => ({
+                        ...film,
+                        poster_path: `https://image.tmdb.org/t/p/w500${film.poster_path}`,
+                    })) });
+
+                    // Récupérer les genres pour chaque film
+                    data.results.forEach(film => {
+                        fetch(`https://api.themoviedb.org/3/${this.state.type}/${film.id}?api_key=143c38a426bcb241741fcffb55828445&language=fr-FR`)
+                            .then(response => response.json())
+                            .then(movieData => {
+                                this.update({
+                                    films: this.state.films.map(existingFilm => {
+                                        if (existingFilm.id === film.id) {
+                                            return {
+                                                ...existingFilm,
+                                                genres: movieData.genres.map(genre => genre.name)
+                                            };
+                                        }
+                                        return existingFilm;
+                                    })
+                                });
+                            })
+                            .catch(error => console.error('Erreur de chargement des genres du film:', error));
+                    });
+                })
+                .catch(error => console.error('Erreur de chargement des films:', error));
+            },
+
+            decrementPage() {
+                if (this.state.currentPage > 1) {
+                    this.update({ currentPage: this.state.currentPage - 1 });
+                    this.fetchFilms();
+                }
+            },
+
+            incrementPage() {
+                if (this.state.currentPage < this.state.max_page) {
+                    this.update({ currentPage: this.state.currentPage + 1 });
+                    this.fetchFilms();
+                }
+            },
+        
+        }
+    </script>
+
+</film>

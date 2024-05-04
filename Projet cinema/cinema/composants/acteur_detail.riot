@@ -1,0 +1,102 @@
+<acteur_detail>
+
+    <div class="acteur-details">
+
+        <img src="https://image.tmdb.org/t/p/w500{state.photo}" alt="Photo de {this.props.acteurId}">
+
+
+        <div class="details">
+            <h2>Nom: {state.nom}</h2>
+            <p class="acteur_p"><B>Genre: </B> {state.sexe}</p>
+            <div class="horizontal-line"></div>
+            <p class="acteur_p"><B>Biographie: </B> {state.bio}</p>
+            <div class="horizontal-line"></div>
+            <div class="div_flex">
+                <p class="acteur_p"><B>Date de Naissance: </B> {state.anniv}</p>&nbsp
+                <p class="acteur_p" if={state.deces}>- décédée le: {state.deces}</p>
+            </div>
+            <p class="acteur_p"><B>Lieux de naissance: </B> {state.lieu_naiss}</p>            
+            <p class="acteur_p"><B>Cote: </B> {state.cote}</p>
+        </div>
+
+    </div>
+
+    <style>
+        .acteur-details{
+            display: flex;
+            flex-direction: row;
+            margin-top: 1rem;
+        }
+
+        .horizontal-line {
+            width: 70%;
+            height: 2px;
+            background-color: #ffee00;
+            margin: 0 auto;
+        }
+        
+        .acteur_p{
+            font-size: 1.5rem;
+        }
+
+        .div_flex{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .details{
+            display: block;
+        }
+
+        img{
+            height: min-content;
+            margin-right: 1rem;
+        }
+    </style>
+
+    <script>
+        
+        export default {
+            state: {
+                nom: '',
+                photo: '',
+                bio: '',
+                anniv: '',
+                lieu_naiss: '',
+                deces: '',
+                sexe: '',
+                cote: '',
+            },
+
+            onMounted() {
+                const acteurId = this.props.acteurId;
+                fetch("https://api.themoviedb.org/3/person/" + acteurId + "?api_key=143c38a426bcb241741fcffb55828445&language=fr-FR")
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    this.update({
+                        nom: data.name,
+                        photo: data.profile_path,
+                        bio: data.biography,
+                        anniv: data.birthday,
+                        lieu_naiss: data.place_of_birth,
+                        deces: data.deathday,
+                        sexe: data.gender,
+                        cote: data.popularity,
+                    });
+                    if(this.state.sexe == 1){
+                        this.update({
+                            sexe: 'Femme'
+                        });
+                    }
+                    else{
+                        this.update({
+                            sexe: 'Homme'
+                        });
+                    }
+                })
+            }
+        };
+    </script>
+    
+</acteur_detail>

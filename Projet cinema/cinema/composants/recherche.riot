@@ -1,0 +1,164 @@
+<recherche>
+
+    <aside class="sidebar">
+
+        <h2>Type</h2>
+        <ul class="genres">
+          <li onclick={wichType} data-value="movie">Films</li>    
+          <li onclick={wichType} data-value="tv">Séries</li>           
+        </ul>
+
+        <div>
+          <h2>Recherche</h2>
+            <input type="text" placeholder="Recherche..." onkeypress="{ handleKeyPress }" oninput="{ updateSearchText }">
+        </div>
+
+        <h2>Genres</h2>
+        <ul class="genres">
+          <li each={ genre in state.genres} onclick={handleGenreClick} data-value="{ genre.id }">{genre.name}</li>            
+        </ul>
+
+        <h2>Catégories</h2>
+        <ul class="genres">
+          <li onclick={sortByPopularity}>Les plus populaires</li>
+          <li if={window.location.href.includes("movie")} onclick={sortByRecent}>Les plus récents</li>
+          <li onclick={sortByRating}>Les mieux notés</li>  
+          <li if={window.location.href.includes("movie")} onclick={sortByComming}>À venir</li>
+          <li if={window.location.href.includes("tv")} onclick={sortByToday}>Diffusé aujourd'hui</li>  
+          <li if={window.location.href.includes("tv")} onclick={sortByEnCours}>En cours de diffusion</li>       
+        </ul>
+    </aside>
+      
+    <style>
+      h2{
+          text-decoration: none;
+          font-size: 1.5rem;
+          color: rgb(200, 170, 50);
+          margin-top: 1rem;
+      }
+    </style>
+
+    <script>
+      export default {
+        searchText: '', // Variable pour stocker le texte de recherche
+
+        state: {
+          genres: [],
+          films: [], // Ajout de la liste des films
+        },
+
+        handleKeyPress(event) {
+          if (event.key === 'Enter') {
+            var actuel = window.location.href;
+            if (actuel.includes("tv")) {
+              window.location.href = '#/recherche/tv/text/'+this.searchText;
+            }
+            else if (actuel.includes("multi")) {
+              window.location.href = '#/recherche/multi/text/'+this.searchText;
+            }
+            else{
+              window.location.href = '#/recherche/movie/text/'+this.searchText;
+            }
+          }
+        },
+
+        handleGenreClick(event) {
+          const genreId = event.target.getAttribute('data-value');
+
+          var actuel = window.location.href;
+            if (actuel.includes("tv")) {
+              window.location.href = '#/recherche/tv/genre/'+genreId;
+            }else{
+              window.location.href = '#/recherche/movie/genre/'+genreId;
+            }
+        },
+
+        wichType(event) {
+          
+          const type = event.target.getAttribute('data-value');
+          var urlActuelle = window.location.href;
+
+          if (urlActuelle.includes("tv")) {
+            this.fetchGenres("movie");
+              var newUrl = urlActuelle.replace("tv", type);
+            }
+            else if(urlActuelle.includes("movie")) {
+              this.fetchGenres("tv");
+              var newUrl = urlActuelle.replace("movie", type);
+            }
+            else if(urlActuelle.includes("multi")) {
+              this.fetchGenres(type);
+              var newUrl = urlActuelle.replace("multi", type);
+            }
+            else{
+              
+              var newUrl = urlActuelle + '#/' + type;
+            }
+          window.location.href = newUrl;
+          if(type == "tv"){
+                this.fetchGenres("tv");
+              }
+              else{
+                this.fetchGenres("movie");
+              }
+        },
+
+        updateSearchText(event) {
+          this.searchText = event.target.value;
+        },
+
+
+        onMounted(){
+          var actuel = window.location.href;
+          if (actuel.includes("tv")) {
+            this.fetchGenres("tv");
+            }else{
+              this.fetchGenres("movie");
+            }
+          
+        },
+
+        fetchGenres(quelType) {
+          fetch(`https://api.themoviedb.org/3/genre/${quelType}/list?api_key=143c38a426bcb241741fcffb55828445&language=fr`)
+            .then(response => response.json())
+            .then(data => {
+              this.update({ genres: data.genres.map(genre => ({ ...genre })) });
+            })
+            .catch(error => console.error('Erreur de chargement des genres:', error));
+        },
+
+        sortByPopularity() {
+          var actuel = window.location.href;
+          if (actuel.includes("tv")) {
+              window.location.href = '#/recherche/tv/populaire';
+            }else{
+              window.location.href = '#/recherche/movie/populaire';
+            }
+        },
+
+        sortByRecent() {
+              window.location.href = '#/recherche/movie/recent';
+        },
+
+        sortByRating() {
+          var actuel = window.location.href;
+            if (actuel.includes("tv")) {
+              window.location.href = '#/recherche/tv/note';
+            }else{
+              window.location.href = '#/recherche/movie/note';
+            }
+        },
+        sortByComming() {
+              window.location.href = '#/recherche/movie/comming';
+        },
+
+        sortByToday() {
+              window.location.href = '#/recherche/tv/today';
+        },
+
+        sortByEnCours() {
+              window.location.href = '#/recherche/tv/curently';
+        },
+      }
+    </script>
+</recherche>

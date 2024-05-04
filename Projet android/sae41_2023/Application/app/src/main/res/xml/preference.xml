@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory>
+        android:title="@string/Parametre"
+        android:key="@string/ceciNeSertARien"
+        <CheckBoxPreference
+            android:key="tailleCroix"
+            android:title="@string/prefCroix"
+            android:summary="@string/prefCroixSum"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="prolongementTrait"
+            android:title="@string/prefProlonger"
+            android:summary="@string/prefProlongerSum"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="triche"
+            android:title="@string/prefTriche"
+            android:summary="@string/prefTricheSum"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

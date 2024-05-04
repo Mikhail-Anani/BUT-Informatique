@@ -1,0 +1,236 @@
+<film_detail>
+
+    <div class="movie-details" style="background-image: url('https://image.tmdb.org/t/p/w500/{state.src_image}'); background-repeat: no-repeat; background-position: center; background-size: cover;">
+        <div id="bg_titre">
+            <h2><B>Titre du Film: {state.titre}</B></h2>
+        </div>
+        <div id="movie-box">
+            <img src="{state.src_image}" alt="{state.titre}">
+        </div>
+        
+        <div class="details">
+            
+            <p class="categ"><B>Durée: </B> {state.duree} min</p>
+            <p class="categ"><B>Synopsis: </B> {state.synopsis}</p>
+            <p class="categ"><B>Année: </B> {state.annee}</p>
+            <p class="categ"><B>Réalisateur: </B> {state.realisateur}</p> <!-- Affichage du réalisateur -->
+            <p class="container_acteur"><B>Acteurs:</B>&nbsp &nbsp &nbsp 
+                
+                    <a each="{ actor in state.acteurs }" href="#/acteur/detail/{ actor.id }" class="lien_acteur" target="">
+                        <img src="https://image.tmdb.org/t/p/w500{actor.poster}" class="poster_acteur" alt="{ actor.name }">
+                        <p class="nom_acteur">{ actor.name }</p>
+                    </a>{ actor !== state.acteurs[state.acteurs.length - 1] ? ', ' : '' }
+           
+            </p>
+            <p class="categ"><B>Genres: {state.genres}</B></p> <!-- Affichage de tous les genres -->
+            <a href="{state.urlTrailer}{state.key}" target="blanked" class="a_trailer" >
+                <img src="{state.src_image}" alt="{state.titre}" class="lienVideo">
+                <p>{state.textTrailer}{state.site}.</p>
+            </a>
+        </div>
+
+    </div>
+
+    <style>
+        a .lienVideo{
+            max-width: 500px;
+            max-height: 250px;
+            width: auto;
+            text-decoration: none;
+            margin-right: 10px;
+            transition: all ease 0.3s;
+        }
+
+        .a_trailer{
+            width: 100%;
+        }
+
+        @keyframes deplacement {
+            0% { /* Début de l'animation */
+                transform: translateX(160%); /* Commence à l'extérieur de l'écran à gauche */
+            }
+            100% { /* Fin de l'animation */
+                transform: translateX(-160%); /* Sort de l'écran à droite */
+            }
+        }
+
+        #bg_titre{
+            background-color: rgb(215, 215, 215);
+        }
+
+        h2{
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-top: 0;
+            display: inline-block;
+            margin-bottom: 1rem;
+            /*animation: deplacement 11s linear infinite;*/ /* 10 secondes pour aller de gauche à droite en boucle */
+        }
+        
+
+
+        .movie-details{
+            text-align: center;
+        }
+
+
+        .details{
+            width: 80%;
+            border: solid 2px black;
+            padding-left: 10%;
+            padding-right: 10%;
+            padding-bottom: 2%;
+            overflow: hidden;
+            background-color: rgba(230, 230, 230, 1);
+            text-align: left;
+            margin: 0;
+        }
+
+        #movie-box{
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #movie-box img{
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+
+        a .lienVideo:hover{
+            transform: scale(1.1);
+            transition: all ease 0.3s;
+        }
+
+        a{
+            display: flex;
+            align-items: center;
+            text-decoration: none; /* Supprime la décoration de lien par défaut */
+            color: black; /* Couleur du texte */
+        }
+
+        a p {
+            margin: 0; /* Supprime les marges par défaut */
+            text-decoration: underline; /* Souligne le texte */
+            color: inherit; /* Hérite de la couleur du texte parent */
+        }
+
+        a p:hover {
+            color: blue; /* Couleur du texte au survol */
+        }
+
+
+        .container_acteur{
+            display: flex;
+            font-size: 1.5rem;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nom_acteur{
+            font-size: 1rem;
+        }
+
+        .categ{
+            font-size: 1.5rem;
+        }
+        .lien_acteur {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 3.5rem;
+        }
+
+        .lien_acteur .poster_acteur {
+            width: 7rem; 
+            height: auto;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            transition: all ease 0.5s;
+        }
+
+        .lien_acteur .poster_acteur:hover {
+            transform: rotateY(360deg);
+            transition: all ease 1s;
+        }
+    </style>
+
+    <script>
+        
+        export default {
+            state: {
+                titre: '',
+                src_image: '',
+                duree: '',
+                synopsis: '',
+                site: 'youtube',
+                key: '',
+                textTrailer: 'Cliquer, pour visionner la bande annonce. Ce lien renverra vers le site ',
+                urlTrailer: 'https://www.youtube.com/watch?v=',
+                annee: '',
+                realisateur: '',
+                acteurs: '',
+                acteurs: [],
+                genres: ''
+            },
+
+            onMounted() {
+                const filmId = this.props.filmId;
+                
+                // Fetch movie details
+                fetch("https://api.themoviedb.org/3/movie/" + filmId + "?api_key=143c38a426bcb241741fcffb55828445&language=fr-FR")
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    this.update({
+                        titre: data.original_title,
+                        src_image: "https://image.tmdb.org/t/p/w500" + data.poster_path,
+                        duree: data.runtime,
+                        synopsis: data.overview,
+                        annee: data.release_date.split("-")[0], // Prend uniquement l'année
+                        genres: data.genres.map(genre => genre.name).join(", ")
+                    });
+
+                    // Fetch movie credits for director and actors
+                    return fetch(`https://api.themoviedb.org/3/movie/${filmId}/credits?api_key=143c38a426bcb241741fcffb55828445`);
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const director = data.crew.find(member => member.job === 'Director')?.name;
+                    const topActors = data.cast.slice(0, 5).map(actor => ({id: actor.id, name: actor.name, poster: actor.profile_path}));
+                    this.update({
+                        realisateur: director,
+                        acteurs: topActors
+                    });
+                });
+
+                fetch(`https://api.themoviedb.org/3/movie/${filmId}/videos?api_key=143c38a426bcb241741fcffb55828445&language=fr-FR;`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.results.length > 0) { // Vérifie s'il y a des résultats
+                            const firstResult = data.results[0]; // Obtient le premier résultat
+                            console.log(firstResult);
+                            this.update({
+                                site: firstResult.site,
+                                key: firstResult.key
+                            });
+                        } else {
+                            this.update({
+                                site: '',
+                                key: '',
+                                urlTrailer: '',
+                                textTrailer: "Désolé, il n'y à malheuresement pas de bande anonce disponible. Vous pouvez toujours essayer d'en trouver une en VO sur Youtube, Dailymotion, ou encore sur le site officiel du studio de réalisation du film"
+                            });
+                        }
+                    });
+            }
+        };
+    </script>
+    
+</film_detail>

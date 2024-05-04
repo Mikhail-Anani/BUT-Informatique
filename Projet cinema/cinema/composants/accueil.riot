@@ -1,0 +1,137 @@
+<accueil>
+   
+    <div id="div_recherche">
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Recherche..." onkeypress="{ handleKeyPress }" oninput="{ updateSearchText }">
+        </div>
+    </div>
+    <div class="container">
+    <div class="main-content">
+        <div id="miniBandeau">
+            <h2>{state.trie}</h2>
+            <p id="nPage">page: {state.currentPage}</p>
+        </div>
+        <div class="grid">
+            <div each="{ film in state.films }" class="item">
+                <a href="#/{film.media_type}/detail/{film.id}">
+                    <img src="{ film.poster_path }" alt="{ film.title }">
+                    <div class="details">
+                        <h3>{ film.title }</h3>
+                        <p>Langue originale: { film.original_language }</p>
+                        <p>Note: { film.vote_average }</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pagination">
+            <button id="bt_page_precedente" class="bt_pagin" onclick="{decrementPage}">&laquo; Précédent</button>
+            <button class="bt_pagin">{state.currentPage}</button>
+            <button id="bt_page_suivant" class="bt_pagin" onclick="{incrementPage}">Suivant &raquo;</button>
+        </div>
+    </div>
+    </div>
+  
+    <style>
+        #div_recherche {
+            width: 100%;
+            margin: 0%;
+            background-image: url("Images/cinema.jpg");
+            min-height: 25vh;
+            display: flex; 
+            justify-content: center; /* Centrer horizontalement */
+            align-items: center; /* Centrer verticalement */
+        }
+
+        /* Style pour la barre de recherche */
+        .search-bar {
+            width: 60%; 
+            max-width: 650px; 
+            background-color: #a39b9b; 
+            border-radius: 25px;
+            border: 2px solid rgb(200, 170, 50);; 
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+        }
+
+        /* Style pour le champ de texte de recherche */
+        .search-input {
+            width: calc(100% - 40px);
+            padding: 12px 20px;
+            border: none; 
+            background: none;
+            color: rgb(0, 0, 0);
+            font-size: 1.35rem;
+        }
+    </style>
+  
+    <script>
+        export default {
+            searchText: '',
+
+            state: {
+                films: [],
+                currentPage: 1,
+                trie: '',
+                lastType: '',
+                lastPage: 0,
+                max_page: 50, // Supposons que c'est la limite de pagination pour l'exemple
+            },
+
+            onMounted() {
+                this.fetchFilms();
+                this.state.trie = 'Tendances de la semaine';
+            },
+
+            fetchFilms() {
+                fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=143c38a426bcb241741fcffb55828445&language=fr-FR&page=${this.state.currentPage}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.results);
+                    this.update({ films: data.results.map(film => ({
+                        ...film,
+                        poster_path: `https://image.tmdb.org/t/p/w500${film.poster_path}`,
+                    })) });
+                
+                })
+                .catch(error => console.error('Erreur de chargement des films:', error));
+            },
+
+            decrementPage() {
+                if (this.state.currentPage > 1) {
+                    this.update({ currentPage: this.state.currentPage - 1 });
+                    this.fetchFilms();
+                }
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }, 10); 
+            },
+
+            incrementPage() {
+                if (this.state.currentPage < this.state.max_page) {
+                    this.update({ currentPage: this.state.currentPage + 1 });
+                    this.fetchFilms();
+                }
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }, 10); 
+            },
+
+            handleKeyPress(event) {
+                if (event.key === 'Enter') {
+                  var actuel = window.location.href;
+                    window.location.href = '#/recherche/multi/text/'+this.searchText;
+                }
+              },
+
+            updateSearchText(event) {
+                this.searchText = event.target.value;
+            },
+        }
+    </script>
+</accueil>

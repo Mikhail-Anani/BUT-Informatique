@@ -1,0 +1,150 @@
+<recherche_populaire>
+    <div class="container">
+        <recherche></recherche>
+
+        <div class="main-content">
+            <div id="miniBandeau">
+                <h2>{state.trie}</h2>
+                <p id="nPage">page: {state.currentPage}</p>
+            </div>
+            <div class="grid">
+                <div each="{ film in state.films }" class="item">
+                    <a href="#/{this.props.filmType}/detail/{film.id}">
+                        <img src="{ film.poster_path }" alt="{ film.title }">
+                        <div class="details">
+                            <h3>{ film.title }</h3>
+                            <p if="{ film.genres }">Genres: { film.genres.join(', ') }</p>
+                            <p>Langue originale: { film.original_language }</p>
+                            <p>Note: { film.vote_average }</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="pagination">
+                <button id="bt_page_precedente" class="bt_pagin" onclick="{decrementPage}">&laquo; Précédent</button>
+                <button class="bt_pagin">{state.currentPage}</button>
+                <button id="bt_page_suivant" class="bt_pagin" onclick="{incrementPage}">Suivant &raquo;</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        export default {
+            state: {
+                films: [],
+                currentPage: 1,
+                trie: '',
+                type: '',
+                lastType: '',
+                lastPage: 0,
+                max_page: 50, // Supposons que c'est la limite de pagination pour l'exemple
+            },
+
+            onMounted() {
+                this.updateFilms();
+                if(this.props.filmType == "multi"){
+                    this.state.type = "multi";
+                }
+                else if(this.props.filmType == "tv"){
+                    this.state.type = "séries";
+                }
+                else{
+                    this.state.type = "films";
+                }
+                
+                this.state.trie = 'Liste des ' +this.state.type+ ' les plus populaires';
+            },
+
+            onUpdated() {
+                if (this.props.filmType !== this.state.lastType) {
+                    if(this.props.filmType == "multi"){
+                        this.state.type = "multi";
+                    }
+                    else if(this.props.filmType == "tv"){
+                        this.state.type = "séries";
+                    }
+                    else{
+                        this.state.type = "films";
+                    }
+                    this.updateFilms();
+                }
+            },
+
+            updateFilms() {   
+                             
+                if (this.props.filmType !== this.state.lastType) {
+
+                    this.state.currentPage = 1; 
+                    this.fetchFilms(); 
+                    this.state.trie = 'Liste des ' +this.state.type+ ' les plus populaires';
+                    this.state.lastType = this.props.filmType;
+                    this.state.lastPage = 1;
+                } else if (this.state.currentPage !== this.state.lastPage) {
+                    this.fetchFilms();
+                    this.state.lastPage = this.state.currentPage;
+                }
+                this.update();
+            },
+
+
+            fetchFilms() {
+                fetch(`https://api.themoviedb.org/3/${this.props.filmType}/popular?api_key=143c38a426bcb241741fcffb55828445&language=fr-FR&page=${this.state.currentPage}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.results);
+                    this.update({ films: data.results.map(film => ({
+                        ...film,
+                        poster_path: `https://image.tmdb.org/t/p/w500${film.poster_path}`,
+                    })) });
+                
+                    // Récupérer les genres pour chaque film
+                    data.results.forEach(film => {
+                        fetch(`https://api.themoviedb.org/3/${this.props.filmType}/${film.id}?api_key=143c38a426bcb241741fcffb55828445&language=fr-FR`)
+                            .then(response => response.json())
+                            .then(movieData => {
+                                this.update({
+                                    films: this.state.films.map(existingFilm => {
+                                        if (existingFilm.id === film.id) {
+                                            return {
+                                                ...existingFilm,
+                                                genres: movieData.genres.map(genre => genre.name)
+                                            };
+                                        }
+                                        return existingFilm;
+                                    })
+                                });
+                            })
+                            .catch(error => console.error('Erreur de chargement des genres du film:', error));
+                    });
+                })
+                .catch(error => console.error('Erreur de chargement des films:', error));
+            },
+
+            decrementPage() {
+                if (this.state.currentPage > 1) {
+                    this.update({ currentPage: this.state.currentPage - 1 });
+                    this.fetchFilms();
+                }
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }, 10); 
+            },
+
+            incrementPage() {
+                if (this.state.currentPage < this.state.max_page) {
+                    this.update({ currentPage: this.state.currentPage + 1 });
+                    this.fetchFilms();
+                }
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }, 10); 
+            },
+        }
+    </script>
+</recherche_populaire>

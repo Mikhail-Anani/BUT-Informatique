@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Liste de Films et Séries</title>
+        <link rel="stylesheet" href="./style/styles.css">
+        <script src="./node_modules/riot/riot+compiler.min.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <a href="#">
+                <img src="./Images/logo.png">
+            </a>
+            <div class="container">
+                <h1 class="hola-animation">
+                    <span style="--index:1">T</span>
+                    <span style="--index:2">é</span>
+                    <span style="--index:3">l</span>
+                    <span style="--index:4">é</span>
+                    <span style="--index:5">&nbsp;</span>
+                    <span style="--index:6">F</span>
+                    <span style="--index:7">i</span>
+                    <span style="--index:8">l</span>
+                    <span style="--index:9">t</span>
+                    <span style="--index:10">r</span>
+                    <span style="--index:11">é</span>
+                    <span style="--index:12">e</span>
+                </h1>
+            </div>
+        </header>
+
+        <!--Corps de la page-->
+        <film></film>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2024 Liste de Films et Séries. Par Mikhail Anani et Dylan Landrin</p>
+            </div>
+        </footer>
+
+        <!--DECLARATION COMPOSANT-->
+        <script src="https://unpkg.com/@riotjs/route/index.umd.js"></script>
+        <script type="riot" src="./composants/film.riot"></script>
+        <script type="riot" src="./composants/recherche.riot"></script>
+        <script type="riot" src="./composants/film_detail.riot"></script>
+        <script type="riot" src="./composants/serie_detail.riot"></script>
+        <script type="riot" src="./composants/recherche_text.riot"></script>
+        <script type="riot" src="./composants/recherche_genre.riot"></script>
+        <script type="riot" src="./composants/recherche_recent.riot"></script>
+        <script type="riot" src="./composants/recherche_note.riot"></script>
+        <script type="riot" src="./composants/recherche_today.riot"></script>
+        <script type="riot" src="./composants/recherche_curently.riot"></script>
+        <script type="riot" src="./composants/recherche_populaire.riot"></script>
+        <script type="riot" src="./composants/recherche_comming.riot"></script>
+        <script type="riot" src="./composants/erreur.riot"></script>
+        <script type="riot" src="./composants/accueil.riot"></script>
+        <script type="riot" src="./composants/acteur_detail.riot"></script>
+        <script>
+            riot.register('router', route.Router)
+            riot.register('route', route.Route)
+
+            riot.compile().then(function() {
+              riot.mount('film');
+            })
+
+            
+          </script>
+          
+    </body>
+
+</html>
